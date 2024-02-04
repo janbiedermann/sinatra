@@ -2,12 +2,12 @@
 
 require 'rack/protection'
 require 'rack/utils'
-require 'tempfile'
+# require 'tempfile'
 
-begin
-  require 'escape_utils'
-rescue LoadError
-end
+# begin
+#   require 'escape_utils'
+# rescue LoadError
+# end
 
 module Rack
   module Protection

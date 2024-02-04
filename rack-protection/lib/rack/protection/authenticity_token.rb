@@ -2,7 +2,7 @@
 
 require 'rack/protection'
 require 'securerandom'
-require 'openssl'
+# require 'openssl'
 require 'base64'
 
 module Rack

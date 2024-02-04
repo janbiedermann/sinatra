@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 # external dependencies
+require 'opal-parser'
 require 'rack'
-begin
-  require 'rackup'
-rescue LoadError
-end
+# begin
+#   require 'rackup'
+# rescue LoadError
+# end
 require 'tilt'
 require 'rack/protection'
 require 'rack/session'
@@ -15,7 +16,7 @@ require 'mustermann/regular'
 
 # stdlib dependencies
 require 'time'
-require 'uri'
+require 'cgi'
 
 # other files we need
 require 'sinatra/indifferent_hash'
@@ -972,7 +973,7 @@ module Sinatra
     include Helpers
     include Templates
 
-    URI_INSTANCE = URI::Parser.new
+    # URI_INSTANCE = URI::Parser.new
 
     attr_accessor :app, :env, :request, :response, :params
     attr_reader   :template_cache
@@ -1108,7 +1109,7 @@ module Sinatra
 
       regexp_exists = pattern.is_a?(Mustermann::Regular) || (pattern.respond_to?(:patterns) && pattern.patterns.any? { |subpattern| subpattern.is_a?(Mustermann::Regular) })
       if regexp_exists
-        captures           = pattern.match(route).captures.map { |c| URI_INSTANCE.unescape(c) if c }
+        captures           = pattern.match(route).captures.map { |c| CGI.unescape(c) if c }
         values            += captures
         @params[:captures] = force_encoding(captures) unless captures.nil? || captures.empty?
       else
@@ -1143,7 +1144,7 @@ module Sinatra
     def static!(options = {})
       return if (public_dir = settings.public_folder).nil?
 
-      path = "#{public_dir}#{URI_INSTANCE.unescape(request.path_info)}"
+      path = "#{public_dir}#{CGI.unescape(request.path_info)}"
       return unless valid_path?(path)
 
       path = File.expand_path(path)
@@ -1952,10 +1953,10 @@ module Sinatra
       set :session_secret, format('%064x', Kernel.rand((2**256) - 1))
     end
 
-    class << self
-      alias methodoverride? method_override?
-      alias methodoverride= method_override=
-    end
+    # class << self
+    #   alias methodoverride? method_override?
+    #   alias methodoverride= method_override=
+    # end
 
     set :run, false                       # start server via at-exit hook?
     set :running_server, nil

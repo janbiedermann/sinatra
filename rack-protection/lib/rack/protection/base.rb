@@ -2,7 +2,7 @@
 
 require 'rack/protection'
 require 'rack/utils'
-require 'digest'
+# require 'digest'
 require 'logger'
 require 'uri'
 
